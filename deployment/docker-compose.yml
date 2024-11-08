@@ -1,0 +1,31 @@
+services:
+  call-manager-service:
+    build: ..
+    image: "call-manager-service"
+    container_name: "call-manager-service"
+    ports:
+      - "6689:6689"
+    volumes:
+      - ../config/configuration.yml:/etc/call-manager/configuration.yml
+    networks:
+      - call-manager-network
+    depends_on:
+      - postgres
+  postgres:
+    image: "postgres"
+    container_name: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/postgres-data:/var/lib/postgresql/data
+    networks:
+      - call-manager-network
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: calls
+
+networks:
+  call-manager-network:
+    driver: bridge

@@ -1,0 +1,2 @@
+port: 6689
+connectionString: "postgres://username:password@postgres:5432/calls?sslmode=disable"
